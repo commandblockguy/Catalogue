@@ -1,6 +1,7 @@
 name: Catalogue
 main: com.commandblockguy.catalogue.Catalogue
 version: 1.0
+database: true
 commands:
   catalogue:
     description: Your description

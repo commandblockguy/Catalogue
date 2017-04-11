@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.commandblockguy.catalogue.commands.CatalogueCommand;
+import com.commandblockguy.catalogue.gui.ChestDisplay;
 import com.commandblockguy.catalogue.listeners.ShopCreated;
 import com.commandblockguy.catalogue.listeners.ShopDestroyed;
 import com.commandblockguy.catalogue.listeners.Transaction;
@@ -20,6 +21,7 @@ public class Catalogue extends JavaPlugin {
     private String password = "minecraft"; 
     private String url = "jdbc:mysql://localhost:3306/";
     private String database = "minecraft";
+   
 
     public Catalogue() {
     	plugin = this;
@@ -35,6 +37,7 @@ public class Catalogue extends JavaPlugin {
     	getServer().getPluginManager().registerEvents(new ShopCreated(), this);
     	getServer().getPluginManager().registerEvents(new ShopDestroyed(), this);
     	getServer().getPluginManager().registerEvents(new Transaction(), this);
+    	getServer().getPluginManager().registerEvents(new ChestDisplay(), this);
     	try { 
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
