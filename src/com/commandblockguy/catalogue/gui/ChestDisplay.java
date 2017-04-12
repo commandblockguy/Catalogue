@@ -3,40 +3,48 @@ package com.commandblockguy.catalogue.gui;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-public class ChestDisplay implements Listener{
-	public Icon[][] icons;
-	int ySize = 3;
-	Inventory inv;
-	String title;
+import com.commandblockguy.catalogue.Catalogue;
+
+public class ChestDisplay implements Listener {
+	@EventHandler
+	public void onInventoryClick(InventoryClickEvent event) {
+		if (!event.getInventory().equals(inv)) return;
+		
+		Player player = (Player) event.getWhoClicked();
+		
+		Bukkit.broadcastMessage(player.getName() + " clicked something in /catalogue!");
+		HandlerList.unregisterAll(this);
+	}
+	
+	public Icon[] icons;
+	public int ySize = 3;
+	public Inventory inv;
+	public String title;
+	
+	public ChestDisplay(int ySize, Icon[] icons, String title) {
+		this.ySize = ySize;
+		for (Icon i : icons) {
+			inv = Bukkit.createInventory(null, 9 * ySize, title);
+			inv.setItem(i.itemSlot(), i.getItem());
+		}
+		Catalogue.getPlugin().getServer().getPluginManager().registerEvents(this, Catalogue.getPlugin());
+		this.title = title;
+	}
+	public ChestDisplay(int ySize, Icon[] icons) {
+		this(ySize, icons, "Display");
+	}
 	public ChestDisplay(int ySize) {
-		icons = new Icon[ySize][9];
+		this(ySize, null);
 	}
 	public ChestDisplay() {
 		this(6);
 	}
 	public void display(Player player) {
-		inv = Bukkit.createInventory(player, ySize, title);
-	}
-	public static int itemSlot(int x, int y) {
-		//Where 0, 0 is the item in the top left (slot 0) 
-		return x + (9 * y);
-	}
-	public static int slotX(int slotNumber) {
-		return slotNumber % 9;
-	}
-	public static int slotY(int slotNumber) {
-		return (slotNumber - slotX(slotNumber)) / 9;
-	}
-	@EventHandler
-	public void onInventoryClick(InventoryClickEvent event) {
-		if (event.getInventory() != inv) return;
-		
-		Player player = (Player) event.getWhoClicked();
-		
-		Bukkit.broadcastMessage(player.getName() + "clicked something!");
+		player.openInventory(inv);
 	}
 }

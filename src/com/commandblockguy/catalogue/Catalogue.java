@@ -6,10 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.commandblockguy.catalogue.commands.CatalogueCommand;
-import com.commandblockguy.catalogue.gui.ChestDisplay;
 import com.commandblockguy.catalogue.listeners.ShopCreated;
 import com.commandblockguy.catalogue.listeners.ShopDestroyed;
 import com.commandblockguy.catalogue.listeners.Transaction;
@@ -34,10 +34,9 @@ public class Catalogue extends JavaPlugin {
     public void onEnable() {
     	createConfig();
     	this.getCommand("catalogue").setExecutor(new CatalogueCommand());
-    	getServer().getPluginManager().registerEvents(new ShopCreated(), this);
-    	getServer().getPluginManager().registerEvents(new ShopDestroyed(), this);
-    	getServer().getPluginManager().registerEvents(new Transaction(), this);
-    	getServer().getPluginManager().registerEvents(new ChestDisplay(), this);
+    	this.registerEvent(new ShopCreated());
+    	this.registerEvent(new ShopDestroyed());
+    	this.registerEvent(new Transaction());
     	try { 
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -84,4 +83,8 @@ public class Catalogue extends JavaPlugin {
 		config.options().copyDefaults(true);
 		saveConfig();
 	}
+    
+    public void registerEvent(Listener listener) {
+        this.getServer().getPluginManager().registerEvents(listener, this);
+     }
 }
