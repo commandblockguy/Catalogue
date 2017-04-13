@@ -20,9 +20,8 @@ public class Icon {
 		this(item, Icon.slotX(slot), Icon.slotY(slot));
 	}
 	
-	private ItemStack item;
-	private ItemMeta meta;
-	public String words = "IT WORKED";
+	protected ItemStack item;
+	protected ItemMeta meta;
 	public int xPos;
 	public int yPos;
 	
