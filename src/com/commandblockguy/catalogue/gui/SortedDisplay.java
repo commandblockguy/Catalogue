@@ -1,5 +1,7 @@
 package com.commandblockguy.catalogue.gui;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 
 import com.commandblockguy.catalogue.Catalogue;
@@ -18,15 +20,17 @@ public class SortedDisplay extends ChestDisplay {
 	private UpIcon upIcon;
 	private DownIcon downIcon;
 	private int scroll = 0;
+	private ArrayList<Icon> sortedIcons = new ArrayList<Icon>();
 	
 	public SortedDisplay(int scroll) {
 		super(6, null, "Sorted Display");
 		listener = this;
+		this.scroll = scroll;
 		
 		upIcon = new UpIcon(8, this);
 		sortIcon = new SortIcon(17);
 		filterIcon = new FilterIcon(26);
-		backIcon = new BackIcon(44);
+		backIcon = new BackIcon(44, this);
 		downIcon = new DownIcon(53, this);
 		
 		icons = new Icon[5];
@@ -35,8 +39,6 @@ public class SortedDisplay extends ChestDisplay {
 		icons[2] = filterIcon;
 		icons[3] = backIcon;
 		icons[4] = downIcon;
-		this.scroll = scroll;
-		Bukkit.broadcastMessage(String.valueOf(scroll));
 	}
 	public int getScroll() {
 		return scroll;
@@ -44,24 +46,38 @@ public class SortedDisplay extends ChestDisplay {
 	public void setScroll(int scroll) {
 		this.scroll = scroll;
 	}
-	public Icon[] getIcons() {
-		return icons;
+	public ArrayList<Icon> getIcons() {
+		return sortedIcons;
 	}
-	public void setIcons(Icon[] icons) {
-		this.icons = icons;
+	public void addIcon(Icon icon) {
+		int slot = 0;
+		if (sortedIcons.isEmpty()) {
+			slot = 0;
+		} else {
+			slot = sortedIcons.get(sortedIcons.size() - 1).itemSlot() + 1;
+			if (slot % 9 == 8)
+				slot++;
+		}
+		icon.setSlot(slot);
+		sortedIcons.add(icon);
+	}
+	public void addIcons(ArrayList<Icon> icons) {
+		for(Icon i : icons) {
+			this.addIcon(i);
+		}
 	}
 	@Override
 	public void create() {
 		inv = Bukkit.createInventory(null, 9 * ySize, title);
 		for (Icon i : icons) {
-			if (i.xPos == 8) {
-				inv.setItem(i.itemSlot(), i.getItem());
-			}
-			else if (9 * scroll < i.itemSlot()) {
+			inv.setItem(i.itemSlot(), i.getItem());
+		}
+		for (Icon i : sortedIcons) {
+			if (9 * scroll <= i.itemSlot()) {
 				inv.setItem(i.itemSlot() - (9 * scroll), i.getItem());
 			}
-
 		}
+
 		Catalogue.getPlugin().getServer().getPluginManager().registerEvents(listener, Catalogue.getPlugin());
 	}
 }

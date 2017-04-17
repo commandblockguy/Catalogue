@@ -43,6 +43,10 @@ public class Icon{
 	public int itemSlot() {
 		return Icon.itemSlot(xPos, yPos);
 	}
+	public void setSlot(int slot) {
+		xPos = slotX(slot);
+		yPos = slotY(slot);
+	}
 	public static int itemSlot(int x, int y) {
 		//Where 0, 0 is the item in the top left (slot 0) 
 		return x + (9 * y);
@@ -53,10 +57,6 @@ public class Icon{
 	public static int slotY(int slotNumber) {
 		return (slotNumber - slotX(slotNumber)) / 9;
 	}
-	/*public void clickAction()
-	{
-		//Schedule an action to be run the next tick
-	} */
 	public void clickAction() {
 		Bukkit.broadcastMessage("Error: Icon with no run action was clicked!");
 	}

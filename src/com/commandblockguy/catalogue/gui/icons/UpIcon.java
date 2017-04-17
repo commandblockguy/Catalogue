@@ -26,16 +26,20 @@ public class UpIcon extends Icon {
 		this.xPos = slotX(slot);
 		this.yPos = slotY(slot);
 		item.setItemMeta(bannerMeta);
+		if (display.getScroll() <= 64 && display.getScroll() > 0)
+			item.setAmount(display.getScroll() + 1);
 		this.display = display;
 	}
 
 	@Override
 	public void clickAction() {
-		if (display.getScroll() <= 0) {
-			return;
+		if (display.getScroll() > 0) {
+			updatedDisplay = new SortedDisplay(display.getScroll() - 1);
 		}
-		updatedDisplay = new SortedDisplay(display.getScroll() - 1);
-		//updatedDisplay.setIcons(display.getIcons());
+		else {
+			updatedDisplay = new SortedDisplay(display.getScroll());
+		}
+		updatedDisplay.addIcons(display.getIcons());
 		updatedDisplay.display(display.getPlayer());
 	}
 }

@@ -10,7 +10,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import com.commandblockguy.catalogue.Catalogue;
-import com.commandblockguy.catalogue.tasks.CloseInventory;
 import com.commandblockguy.catalogue.tasks.OpenInventory;
 
 public class ChestDisplay implements Listener {
@@ -19,7 +18,6 @@ public class ChestDisplay implements Listener {
 		if (!event.getInventory().equals(inv)) return;
 		
 		event.setCancelled(true);
-		HandlerList.unregisterAll(this);
 		
 		int slot = event.getRawSlot();
 		
@@ -27,7 +25,6 @@ public class ChestDisplay implements Listener {
 			for (Icon i : icons) {
 				if (i != null)
 					if (i.itemSlot() == slot) {
-						Bukkit.getScheduler().scheduleSyncDelayedTask(Catalogue.getPlugin(), new CloseInventory(this));
 						i.clickAction();
 					}
 			}

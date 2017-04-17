@@ -1,6 +1,5 @@
 package com.commandblockguy.catalogue.tasks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -16,7 +15,6 @@ public class OpenInventory implements Runnable {
 	
 	@Override
 	public void run() {
-		Bukkit.broadcastMessage("Inventory Opening!");
 		player.openInventory(inventory);
 	}
 
