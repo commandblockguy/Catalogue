@@ -8,11 +8,12 @@ import com.commandblockguy.catalogue.gui.Icon;
 
 public class FilterIcon extends Icon {
 	public FilterIcon(int slot) {
-		ItemStack item = new ItemStack(Material.IRON_FENCE);
-		item.getItemMeta().setDisplayName("Filter");
+		item = new ItemStack(Material.IRON_FENCE);
+		meta = item.getItemMeta();
+		meta.setDisplayName("Filter");
 		this.xPos = slotX(slot);
 		this.yPos = slotY(slot);
-		this.item = item;
+		item.setItemMeta(meta);
 	}
 
 	@Override

@@ -2,13 +2,17 @@ package com.commandblockguy.catalogue;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import com.Acrobot.Breeze.Utils.PriceUtil;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 public class Shop {
 	public Shop(Sign sign) {
@@ -21,17 +25,33 @@ public class Shop {
 		this(sign.getLines()[3], new double[] {0.0, 0.0}, sign.getLocation(), sign.getLines()[0]);
 		this.prices = checkPrices(sign.getLines());
 	}
+	@SuppressWarnings("deprecation")
 	public Shop(String item, double price[], Location pos, String playerName) {
 		this.item = item;
 		this.prices = price;
 		this.pos = pos;
 		this.playerName = playerName;
+		player = Bukkit.getOfflinePlayer(playerName);
+		uuid = player.getUniqueId();
+		townName = TownyUniverse.getTownName(pos);
+	}
+	public Shop(String item, double buyPrice, double sellPrice, Location pos, UUID uuid) {
+		this.item = item;
+		this.prices[0] = buyPrice;
+		this.prices[1] = sellPrice;
+		this.pos = pos;
+		this.uuid = uuid;
+		player = Bukkit.getOfflinePlayer(uuid);
+		townName = TownyUniverse.getTownName(pos);
 	}
 	
 	private String item;
 	private double prices[];
 	private Location pos;
 	private String playerName;
+	private String townName;
+	private OfflinePlayer player;
+	private UUID uuid;
 	
 	private double[] checkPrices(String lines[]) {
 		double price[] = {0.0, 0.0};
@@ -65,6 +85,9 @@ public class Shop {
 	public String getPlayerName() {
 		return playerName;
 	}
+	public String getTownName() {
+		return townName;
+	}
 	
 	public void register() {
 		String[] args = {
@@ -74,8 +97,8 @@ public class Shop {
 					String.valueOf(prices[0]),
 					String.valueOf(prices[1]),
 					item,
-					playerName,
-					"None"
+					String.valueOf(uuid),
+					townName
 				};
 		String query = "INSERT INTO shops (PosX, PosY, PosZ, BuyPrice, SellPrice, Itemtype, PlayerName, TownName) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {

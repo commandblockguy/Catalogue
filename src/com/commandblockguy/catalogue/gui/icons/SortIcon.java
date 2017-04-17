@@ -8,11 +8,12 @@ import com.commandblockguy.catalogue.gui.Icon;
 
 public class SortIcon extends Icon{
 	public SortIcon(int slot) {
-		ItemStack item = new ItemStack(Material.BOOK_AND_QUILL);
-		item.getItemMeta().setDisplayName("Sort");
+		item = new ItemStack(Material.BOOK_AND_QUILL);
+		meta = item.getItemMeta();
+		meta.setDisplayName("Sort");
 		this.xPos = slotX(slot);
 		this.yPos = slotY(slot);
-		this.item = item;
+		item.setItemMeta(meta);
 	}
 
 	@Override

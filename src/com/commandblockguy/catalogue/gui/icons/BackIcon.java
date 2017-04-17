@@ -8,11 +8,12 @@ import com.commandblockguy.catalogue.gui.Icon;
 
 public class BackIcon extends Icon{
 	public BackIcon(int slot) {
-		ItemStack item = new ItemStack(Material.BARRIER);
-		item.getItemMeta().setDisplayName("Back");
+		item = new ItemStack(Material.BARRIER);
+		meta = item.getItemMeta();
+		meta.setDisplayName("Back");
 		this.xPos = slotX(slot);
 		this.yPos = slotY(slot);
-		this.item = item;
+		item.setItemMeta(meta);
 	}
 
 	@Override

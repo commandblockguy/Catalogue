@@ -1,9 +1,11 @@
 package com.commandblockguy.catalogue.gui;
 
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 
-public class Icon {
+public class Icon{
 	public Icon() {
 		
 	}
@@ -22,6 +24,7 @@ public class Icon {
 	
 	protected ItemStack item;
 	protected ItemMeta meta;
+	protected MaterialData data;
 	public int xPos;
 	public int yPos;
 	
@@ -50,9 +53,11 @@ public class Icon {
 	public static int slotY(int slotNumber) {
 		return (slotNumber - slotX(slotNumber)) / 9;
 	}
-	public void clickAction()
+	/*public void clickAction()
 	{
-		//never interact with the inventory here without scheduling for the next tick
-		
+		//Schedule an action to be run the next tick
+	} */
+	public void clickAction() {
+		Bukkit.broadcastMessage("Error: Icon with no run action was clicked!");
 	}
 }
