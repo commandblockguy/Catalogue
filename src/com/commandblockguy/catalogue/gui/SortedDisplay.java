@@ -51,9 +51,7 @@ public class SortedDisplay extends ChestDisplay {
 	}
 	public void addIcon(Icon icon) {
 		int slot = 0;
-		if (sortedIcons.isEmpty()) {
-			slot = 0;
-		} else {
+		if (!sortedIcons.isEmpty()) {
 			slot = sortedIcons.get(sortedIcons.size() - 1).itemSlot() + 1;
 			if (slot % 9 == 8)
 				slot++;
@@ -62,8 +60,10 @@ public class SortedDisplay extends ChestDisplay {
 		sortedIcons.add(icon);
 	}
 	public void addIcons(ArrayList<Icon> icons) {
-		for(Icon i : icons) {
-			this.addIcon(i);
+		if (icons != null) {
+			for(Icon i : icons) {
+				this.addIcon(i);
+			}
 		}
 	}
 	@Override

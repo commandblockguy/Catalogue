@@ -17,10 +17,10 @@ import com.commandblockguy.catalogue.listeners.Transaction;
 
 public class Catalogue extends JavaPlugin {
 	private static Catalogue plugin;
-    private String username = "minecraft"; 
-    private String password = "minecraft"; 
-    private String url = "jdbc:mysql://localhost:3306/";
-    private String database = "minecraft";
+    private String username; 
+    private String password; 
+    private String url;
+    private String database;
    
 
     public Catalogue() {
@@ -33,6 +33,10 @@ public class Catalogue extends JavaPlugin {
     @Override
     public void onEnable() {
     	createConfig();
+    	username = config.getString("SQL_username");
+    	password = config.getString("SQL_password");
+    	url = config.getString("SQL_URL");
+    	database = config.getString("SQL_database");
     	this.getCommand("catalogue").setExecutor(new CatalogueCommand());
     	this.registerEvent(new ShopCreated());
     	this.registerEvent(new ShopDestroyed());
@@ -49,13 +53,13 @@ public class Catalogue extends JavaPlugin {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        String createTable = "CREATE TABLE IF NOT EXISTS shops(ID integer NOT NULL AUTO_INCREMENT, PosX integer, PosY integer, PosZ integer, BuyPrice decimal(12,2), SellPrice decimal(12,2), ItemType varchar(32), PlayerName varchar(32), TownName varchar(32) DEFAULT 'None', TimeStamp timestamp DEFAULT NOW(), PRIMARY KEY (ID));";
+        String createTable = "CREATE TABLE IF NOT EXISTS shops(ID integer NOT NULL AUTO_INCREMENT, PosX integer, PosY integer, PosZ integer, BuyPrice decimal(12,2), SellPrice decimal(12,2), ItemType varchar(32), PlayerName varchar(36), TownName varchar(32) DEFAULT 'None', TimeStamp timestamp DEFAULT NOW(), PRIMARY KEY (ID));";
         try {
             PreparedStatement table = connection.prepareStatement(createTable);
             table.executeUpdate();
-            } catch (SQLException e) {
-            	e.printStackTrace();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 	@Override
     public void onDisable() {

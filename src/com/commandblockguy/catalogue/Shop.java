@@ -46,7 +46,7 @@ public class Shop {
 	}
 	
 	private String item;
-	private double prices[];
+	private double prices[] = new double[2];
 	private Location pos;
 	private String playerName;
 	private String townName;

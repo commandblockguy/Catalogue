@@ -1,5 +1,8 @@
 package com.commandblockguy.catalogue.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,11 +15,13 @@ public class Icon{
 	public Icon(ItemStack item, ItemMeta meta, int xPos, int yPos) {
 		this(item, xPos, yPos);
 		this.meta = meta;
+		item.setItemMeta(meta);
 	}
 	public Icon(ItemStack item, int xPos, int yPos) {
 		this.item = item;
 		this.xPos = xPos;
 		this.yPos = yPos;
+		meta = item.getItemMeta();
 	}
 	public Icon(ItemStack item, int slot) {
 		this(item, Icon.slotX(slot), Icon.slotY(slot));
@@ -34,11 +39,20 @@ public class Icon{
 	public ItemMeta getMeta() {
 		return meta;
 	}
+	public void addLore(String string) {
+		List<String> lore = new ArrayList<String>();
+		if (meta.hasLore())
+			 lore = meta.getLore();
+		lore.add(string);
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+	}
 	public void setItem(ItemStack itemStack) {
 		item = itemStack;
 	}
 	public void setMeta(ItemMeta itemMeta) {
 		meta = itemMeta;
+		item.setItemMeta(meta);
 	}
 	public int itemSlot() {
 		return Icon.itemSlot(xPos, yPos);
