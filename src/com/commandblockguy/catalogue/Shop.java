@@ -22,27 +22,33 @@ public class Shop {
 		this(sign, player.getName());
 	}
 	public Shop(Sign sign, String player) {
-		this(sign.getLines()[3], new double[] {0.0, 0.0}, sign.getLocation(), sign.getLines()[0]);
+		this(sign.getLines()[3], Integer.valueOf(sign.getLines()[1]), new double[] {0.0, 0.0}, sign.getLocation(), sign.getLines()[0]);
 		this.prices = checkPrices(sign.getLines());
 	}
 	@SuppressWarnings("deprecation")
-	public Shop(String item, double price[], Location pos, String playerName) {
+	public Shop(String item, int amount, double price[], Location pos, String playerName) {
 		this.item = item;
 		this.prices = price;
 		this.pos = pos;
 		this.playerName = playerName;
+		this.amount = amount;
 		player = Bukkit.getOfflinePlayer(playerName);
 		uuid = player.getUniqueId();
 		townName = TownyUniverse.getTownName(pos);
+		if (townName == null)
+			townName = "Wilderness";
 	}
-	public Shop(String item, double buyPrice, double sellPrice, Location pos, UUID uuid) {
+	public Shop(String item, int amount, double buyPrice, double sellPrice, Location pos, UUID uuid) {
 		this.item = item;
 		this.prices[0] = buyPrice;
 		this.prices[1] = sellPrice;
 		this.pos = pos;
 		this.uuid = uuid;
+		this.amount = amount;
 		player = Bukkit.getOfflinePlayer(uuid);
 		townName = TownyUniverse.getTownName(pos);
+		if (townName == null)
+			townName = "Wilderness";
 	}
 	
 	private String item;
@@ -52,6 +58,7 @@ public class Shop {
 	private String townName;
 	private OfflinePlayer player;
 	private UUID uuid;
+	private int amount;
 	
 	private double[] checkPrices(String lines[]) {
 		double price[] = {0.0, 0.0};
@@ -76,6 +83,15 @@ public class Shop {
 	public double getSellPrice() {
 		return prices[1];
 	}
+	public double getPerItemBuyPrice() {
+		double value = prices[0] / amount;
+		Bukkit.broadcastMessage("v: " + value);
+		return value;
+	}
+	public double getPerItemSellPrice() {
+		double value = prices[1] / amount;
+		return value;
+	}
 	public Location getLocation() {
 		return pos;
 	}
@@ -97,10 +113,11 @@ public class Shop {
 					String.valueOf(prices[0]),
 					String.valueOf(prices[1]),
 					item,
+					String.valueOf(amount),
 					String.valueOf(uuid),
 					townName
 				};
-		String query = "INSERT INTO shops (PosX, PosY, PosZ, BuyPrice, SellPrice, Itemtype, PlayerName, TownName) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO shops (PosX, PosY, PosZ, BuyPrice, SellPrice, Itemtype, Amount, PlayerName, TownName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pstmt = Catalogue.connection.prepareStatement(query);
             for(int argument = 1; argument <= args.length; argument++) {

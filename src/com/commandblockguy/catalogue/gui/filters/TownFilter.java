@@ -4,6 +4,7 @@ public class TownFilter extends Filter {
 
 	public TownFilter(String value, FilterOperator operator) {
 		super(value, operator);
+		this.column = "TownName";
 	}
 
 }

@@ -7,10 +7,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.commandblockguy.catalogue.gui.Icon;
 import com.commandblockguy.catalogue.gui.SortedDisplay;
+import com.commandblockguy.catalogue.gui.comparators.PerItemBuyPriceComparator;
+import com.commandblockguy.catalogue.gui.filters.Filter;
 import com.commandblockguy.catalogue.gui.filters.FilterOperator;
 import com.commandblockguy.catalogue.gui.filters.ItemFilter;
+import com.commandblockguy.catalogue.gui.icons.ShopIcon;
 
 public class CatalogueCommand implements CommandExecutor {
 
@@ -18,12 +20,19 @@ public class CatalogueCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            String itemName = "Dirt";
-            if(args.length != 0)
-            	itemName = args[0];
-            ItemFilter filter = new ItemFilter(itemName, FilterOperator.EQUALS);
+            String value = args[0];
+        	Filter filter = new ItemFilter(value, FilterOperator.EQUALS);
+            //if(args.length <= 1)
+            	//return false;
+            //if(args[0] == "item")
+            	//filter = new ItemFilter(value, FilterOperator.EQUALS);
+            //if(args[0] == "player")
+            	//filter = new PlayerFilter(value, FilterOperator.EQUALS);
+            //if(args[0] == "town")
+            	//filter = new TownFilter(value, FilterOperator.EQUALS);
             SortedDisplay display = new SortedDisplay(0);
-            ArrayList<Icon> icons = filter.getOutput(player.getWorld());
+            ArrayList<ShopIcon> icons = filter.getOutput(player.getWorld());
+            icons.sort(new PerItemBuyPriceComparator());
             display.addIcons(icons);
             display.display(player);
         }

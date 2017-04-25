@@ -54,6 +54,10 @@ public class Icon{
 		meta = itemMeta;
 		item.setItemMeta(meta);
 	}
+	public void setAmount(int amount) {
+		if(amount != item.getAmount() && amount > 0)
+			item.setAmount(amount);
+	}
 	public int itemSlot() {
 		return Icon.itemSlot(xPos, yPos);
 	}

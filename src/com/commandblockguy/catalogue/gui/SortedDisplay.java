@@ -8,6 +8,7 @@ import com.commandblockguy.catalogue.Catalogue;
 import com.commandblockguy.catalogue.gui.icons.BackIcon;
 import com.commandblockguy.catalogue.gui.icons.DownIcon;
 import com.commandblockguy.catalogue.gui.icons.FilterIcon;
+import com.commandblockguy.catalogue.gui.icons.ShopIcon;
 import com.commandblockguy.catalogue.gui.icons.SortIcon;
 import com.commandblockguy.catalogue.gui.icons.UpIcon;
 
@@ -20,7 +21,7 @@ public class SortedDisplay extends ChestDisplay {
 	private UpIcon upIcon;
 	private DownIcon downIcon;
 	private int scroll = 0;
-	private ArrayList<Icon> sortedIcons = new ArrayList<Icon>();
+	private ArrayList<ShopIcon> sortedIcons = new ArrayList<ShopIcon>();
 	
 	public SortedDisplay(int scroll) {
 		super(6, null, "Sorted Display");
@@ -46,7 +47,7 @@ public class SortedDisplay extends ChestDisplay {
 	public void setScroll(int scroll) {
 		this.scroll = scroll;
 	}
-	public ArrayList<Icon> getIcons() {
+	public ArrayList<ShopIcon> getIcons() {
 		return sortedIcons;
 	}
 	public void addIcon(Icon icon) {
@@ -57,9 +58,9 @@ public class SortedDisplay extends ChestDisplay {
 				slot++;
 		}
 		icon.setSlot(slot);
-		sortedIcons.add(icon);
+		sortedIcons.add((ShopIcon) icon);
 	}
-	public void addIcons(ArrayList<Icon> icons) {
+	public void addIcons(ArrayList<ShopIcon> icons) {
 		if (icons != null) {
 			for(Icon i : icons) {
 				this.addIcon(i);

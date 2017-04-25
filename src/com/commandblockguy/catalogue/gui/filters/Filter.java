@@ -12,7 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import com.commandblockguy.catalogue.Catalogue;
 import com.commandblockguy.catalogue.Shop;
-import com.commandblockguy.catalogue.gui.Icon;
 import com.commandblockguy.catalogue.gui.icons.ShopIcon;
 
 public abstract class Filter {
@@ -32,25 +31,40 @@ public abstract class Filter {
 	public void setValue(String value) {
 		filterValue = value;
 	}
-	public ArrayList<Icon> getOutput(World world) {
+	public ArrayList<ShopIcon> getOutput(World world) {
 		String query = "SELECT * FROM shops WHERE " + column + operatorValue(operator) + "?";
-		ArrayList<Icon> output = new ArrayList<Icon>();
+		ArrayList<ShopIcon> output = new ArrayList<ShopIcon>();
 	    try {
 	        PreparedStatement pstmt = c.prepareStatement(query);
 	        pstmt.setString(1, filterValue);
 	        ResultSet results = pstmt.executeQuery();
 	        while(results.next()) {
 	        	String item = results.getString("ItemType");
+	        	int amount = results.getInt("Amount");
 	        	UUID player = UUID.fromString(results.getString("PlayerName"));
 	        	Location pos = new Location(world, results.getInt("PosX"), results.getInt("PosY"), results.getInt("PosZ"));
 	        	double buyPrice = results.getDouble("BuyPrice");
+	        	double buyUnit = buyPrice / amount;
 	        	double sellPrice = results.getDouble("SellPrice");
-	        	Shop shop = new Shop(item, buyPrice, sellPrice, pos, player);
+	        	double sellUnit = sellPrice / amount;
+	        	String townName = results.getString("TownName");
+	        	Shop shop = new Shop(item, amount, buyPrice, sellPrice, pos, player);
 	        	ShopIcon icon = new ShopIcon(shop);
+	        	icon.setAmount(amount);
 	        	icon.addLore("Player: " + Bukkit.getOfflinePlayer(player).getName());
-	        	icon.addLore("Buy Price: " + buyPrice);
-	        	icon.addLore("Sell Price: " + sellPrice);
+	        	if(buyPrice > 0) {
+	        		icon.addLore("Buy Price: " + buyPrice);
+	        		if(amount != 1)
+	        			icon.addLore("(" + buyUnit + " per item)");
+	        	}
+	        	if(sellPrice > 0) {
+	        		icon.addLore("Sell Price: " + sellPrice);
+	        		if(amount != 1)
+	        			icon.addLore("(" + sellUnit + " per item)");
+	        	}
 	        	icon.addLore("Pos: " + pos.getBlockX() + ", " + pos.getBlockY() + ", " + pos.getBlockZ());
+	        	if(townName != null)
+	        		icon.addLore("Town: " + townName);
 	        	output.add(icon);
 	        }
 	        return output;

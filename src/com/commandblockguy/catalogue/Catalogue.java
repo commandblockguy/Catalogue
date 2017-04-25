@@ -53,7 +53,7 @@ public class Catalogue extends JavaPlugin {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        String createTable = "CREATE TABLE IF NOT EXISTS shops(ID integer NOT NULL AUTO_INCREMENT, PosX integer, PosY integer, PosZ integer, BuyPrice decimal(12,2), SellPrice decimal(12,2), ItemType varchar(32), PlayerName varchar(36), TownName varchar(32) DEFAULT 'None', TimeStamp timestamp DEFAULT NOW(), PRIMARY KEY (ID));";
+        String createTable = "CREATE TABLE IF NOT EXISTS shops(ID integer NOT NULL AUTO_INCREMENT, PosX integer, PosY integer, PosZ integer, BuyPrice decimal(12,2), SellPrice decimal(12,2), ItemType varchar(32), Amount integer, PlayerName varchar(36), TownName varchar(32) DEFAULT 'None', TimeStamp timestamp DEFAULT NOW(), PRIMARY KEY (ID));";
         try {
             PreparedStatement table = connection.prepareStatement(createTable);
             table.executeUpdate();
