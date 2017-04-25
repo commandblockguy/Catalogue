@@ -85,7 +85,6 @@ public class Shop {
 	}
 	public double getPerItemBuyPrice() {
 		double value = prices[0] / amount;
-		Bukkit.broadcastMessage("v: " + value);
 		return value;
 	}
 	public double getPerItemSellPrice() {
