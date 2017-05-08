@@ -23,10 +23,11 @@ public class SortedDisplay extends ChestDisplay {
 	private int scroll = 0;
 	private ArrayList<ShopIcon> sortedIcons = new ArrayList<ShopIcon>();
 	
-	public SortedDisplay(int scroll) {
+	public SortedDisplay(int scroll, String windowTitle) {
 		super(6, null, "Sorted Display");
 		listener = this;
 		this.scroll = scroll;
+		this.title = windowTitle;
 		
 		upIcon = new UpIcon(8, this);
 		sortIcon = new SortIcon(17);
@@ -44,8 +45,8 @@ public class SortedDisplay extends ChestDisplay {
 	public int getScroll() {
 		return scroll;
 	}
-	public void setScroll(int scroll) {
-		this.scroll = scroll;
+	public String getTitle() {
+		return title;
 	}
 	public ArrayList<ShopIcon> getIcons() {
 		return sortedIcons;

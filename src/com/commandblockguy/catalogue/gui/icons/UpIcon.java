@@ -34,10 +34,10 @@ public class UpIcon extends Icon {
 	@Override
 	public void clickAction() {
 		if (display.getScroll() > 0) {
-			updatedDisplay = new SortedDisplay(display.getScroll() - 1);
+			updatedDisplay = new SortedDisplay(display.getScroll() - 1, display.getTitle());
 		}
 		else {
-			updatedDisplay = new SortedDisplay(display.getScroll());
+			updatedDisplay = new SortedDisplay(display.getScroll(), display.getTitle());
 		}
 		updatedDisplay.addIcons(display.getIcons());
 		updatedDisplay.display(display.getPlayer());

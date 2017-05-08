@@ -1,6 +1,5 @@
 package com.commandblockguy.catalogue.gui.icons;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,6 +17,6 @@ public class SortIcon extends Icon{
 
 	@Override
 	public void clickAction() {
-		Bukkit.broadcastMessage("Sort icon was clicked!");
+		System.out.println("Sort icon was clicked!");
 	}
 }

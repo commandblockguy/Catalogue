@@ -5,4 +5,10 @@ database: true
 commands:
   catalogue:
     description: Your description
-    usage: /catalogue
+    usage: /catalogue (item)
+permissions:
+  catalogue.*:
+    description: Gives access to all catalogue commands
+    children:
+      catalogue.gui: true
+      catalogue.register: true

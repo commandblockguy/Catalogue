@@ -1,6 +1,5 @@
 package com.commandblockguy.catalogue.gui.icons;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,6 +17,6 @@ public class FilterIcon extends Icon {
 
 	@Override
 	public void clickAction() {
-		Bukkit.broadcastMessage("Filter icon was clicked!");
+		System.out.println("Filter icon was clicked!");
 	}
 }

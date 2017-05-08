@@ -3,7 +3,6 @@ package com.commandblockguy.catalogue.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
@@ -76,6 +75,6 @@ public class Icon{
 		return (slotNumber - slotX(slotNumber)) / 9;
 	}
 	public void clickAction() {
-		Bukkit.broadcastMessage("Error: Icon with no run action was clicked!");
+		System.out.println("Error: Icon with no run action was clicked!");
 	}
 }

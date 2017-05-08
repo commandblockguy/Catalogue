@@ -31,7 +31,7 @@ public class DownIcon extends Icon {
 	
 	@Override
 	public void clickAction() {
-		updatedDisplay = new SortedDisplay(display.getScroll() + 1);
+		updatedDisplay = new SortedDisplay(display.getScroll() + 1, display.getTitle());
 		updatedDisplay.addIcons(display.getIcons());
 		updatedDisplay.display(display.getPlayer());
 	}

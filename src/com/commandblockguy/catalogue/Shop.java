@@ -100,6 +100,9 @@ public class Shop {
 	public String getPlayerName() {
 		return playerName;
 	}
+	public String getPlayerUUID() {
+		return uuid.toString();
+	}
 	public String getTownName() {
 		return townName;
 	}

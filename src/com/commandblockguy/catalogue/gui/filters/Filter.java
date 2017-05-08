@@ -18,11 +18,13 @@ public abstract class Filter {
 	protected String filterValue;
 	protected String column;
 	protected FilterOperator operator;
+	protected String operatorString;
 	protected Connection c = Catalogue.connection;
 	
 	public Filter(String value, FilterOperator operator) {
 		filterValue = value;
 		this.operator = operator;
+		operatorString = operatorValue(operator);
 	}
 	
 	public String getValue() {
@@ -32,6 +34,7 @@ public abstract class Filter {
 		filterValue = value;
 	}
 	public ArrayList<ShopIcon> getOutput(World world) {
+		//Filters from ALL shops
 		String query = "SELECT * FROM shops WHERE " + column + operatorValue(operator) + "?";
 		ArrayList<ShopIcon> output = new ArrayList<ShopIcon>();
 	    try {
@@ -63,8 +66,9 @@ public abstract class Filter {
 	        			icon.addLore("(" + sellUnit + " per item)");
 	        	}
 	        	icon.addLore("Pos: " + pos.getBlockX() + ", " + pos.getBlockY() + ", " + pos.getBlockZ());
-	        	if(townName != null)
-	        		icon.addLore("Town: " + townName);
+	        	if(townName == null)
+	        		townName = "Wilderness";
+	        	icon.addLore("Town: " + townName);
 	        	output.add(icon);
 	        }
 	        return output;
@@ -73,9 +77,60 @@ public abstract class Filter {
 	    }
 		return null;
 	}
+	
+	public abstract String value(ShopIcon icon);
+	
+	public ArrayList<ShopIcon> filter(ArrayList<ShopIcon> icons, World world) {
+		ArrayList<ShopIcon> output = icons;
+		ArrayList<ShopIcon> toRemove = new ArrayList<ShopIcon>();
+		for(ShopIcon icon : output) {
+			String shopValue = this.value(icon);
+			boolean isInt = true;
+			try {
+				Integer.parseInt(shopValue);
+			} catch(NumberFormatException exception) {
+				isInt = false;
+			}
+			if(isInt)
+				shopValue += ".0";
+			switch (operatorString) {
+			default:
+			case "=":
+				if (!shopValue.equals(this.filterValue)) {
+					toRemove.add(icon);
+				}
+				break;
+			case "<>":
+				if (shopValue.equals(this.filterValue))
+					toRemove.add(icon);
+				break;
+			case "<":
+				if (!(Double.parseDouble(shopValue) < Double.parseDouble(this.filterValue)))
+					toRemove.add(icon);
+				break;
+			case ">":
+				if (!(Double.parseDouble(shopValue) > Double.parseDouble(this.filterValue)))
+					toRemove.add(icon);
+				break;
+			case "<=":
+				if (!(Double.parseDouble(shopValue) <= Double.parseDouble(this.filterValue)))
+					toRemove.add(icon);
+				break;
+			case ">=":
+				if (!(Double.parseDouble(shopValue) >= Double.parseDouble(this.filterValue)))
+					toRemove.add(icon);
+				break;
+			case "none":
+				break;
+			}
+		}
+		output.removeAll(toRemove);
+		return output;
+	}
 	public static String operatorValue(FilterOperator operator) {
 		String value;
 		switch (operator) {
+		default:
 		case EQUALS:
 			value = "=";
 			break;
@@ -93,9 +148,6 @@ public abstract class Filter {
 			break;
 		case GREATER_THAN_EQUAL_TO:
 			value = ">=";
-			break;
-		default:
-			value = "=";
 			break;
 		}
 		return value;
