@@ -7,16 +7,12 @@ import org.bukkit.Bukkit;
 import com.commandblockguy.catalogue.Catalogue;
 import com.commandblockguy.catalogue.gui.icons.BackIcon;
 import com.commandblockguy.catalogue.gui.icons.DownIcon;
-import com.commandblockguy.catalogue.gui.icons.FilterIcon;
 import com.commandblockguy.catalogue.gui.icons.ShopIcon;
-import com.commandblockguy.catalogue.gui.icons.SortIcon;
 import com.commandblockguy.catalogue.gui.icons.UpIcon;
 
 
 public class SortedDisplay extends ChestDisplay {
 	
-	private SortIcon sortIcon;
-	private FilterIcon filterIcon;
 	private BackIcon backIcon;
 	private UpIcon upIcon;
 	private DownIcon downIcon;
@@ -29,18 +25,18 @@ public class SortedDisplay extends ChestDisplay {
 		this.scroll = scroll;
 		this.title = windowTitle;
 		
-		upIcon = new UpIcon(8, this);
-		sortIcon = new SortIcon(17);
-		filterIcon = new FilterIcon(26);
-		backIcon = new BackIcon(44, this);
+		upIcon = new UpIcon(17, this);
+		//sortIcon = new SortIcon(17);
+		//filterIcon = new FilterIcon(26);
+		backIcon = new BackIcon(8, this);
 		downIcon = new DownIcon(53, this);
 		
-		icons = new Icon[5];
+		icons = new Icon[3];
 		icons[0] = upIcon;
-		icons[1] = sortIcon;
-		icons[2] = filterIcon;
-		icons[3] = backIcon;
-		icons[4] = downIcon;
+		//icons[1] = sortIcon;
+		//icons[2] = filterIcon;
+		icons[1] = backIcon;
+		icons[2] = downIcon;
 	}
 	public int getScroll() {
 		return scroll;

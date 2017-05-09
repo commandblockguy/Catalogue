@@ -92,16 +92,21 @@ public class CatalogueCommand implements CommandExecutor {
         					}
         					
         					//sort order will be inverted if des or descending is added
-        					switch(args[i + 1].toLowerCase()) {
-        					default:
+        					try {
+        						switch(args[i + 2].toLowerCase()) {
+        						default:
+        							descending = false;
+        							break;
+        						case "des":
+        							descending = true;
+        							break;
+        						case "descending":
+        							descending = true;
+        							break;
+        						}
+        					} catch(ArrayIndexOutOfBoundsException exception) {
+        						//des is not specified
         						descending = false;
-        						break;
-        					case "des":
-        						descending = true;
-        						break;
-        					case "descending":
-        						descending = true;
-        						break;
         					}
         				}
         				
