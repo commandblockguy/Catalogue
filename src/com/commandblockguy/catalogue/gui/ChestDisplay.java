@@ -1,5 +1,7 @@
 package com.commandblockguy.catalogue.gui;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,19 +35,19 @@ public class ChestDisplay implements Listener {
 		HandlerList.unregisterAll(this);
 	}
 	
-	public Icon[] icons;
+	public ArrayList<Icon> icons;
 	public int ySize = 3;
 	public Inventory inv;
 	public String title;
 	public Listener listener = this;
 	protected Player player;
 	
-	public ChestDisplay(int ySize, Icon[] icons, String title) {
+	public ChestDisplay(int ySize, ArrayList<Icon> icons, String title) {
 		this.ySize = ySize;
 		this.icons = icons;
 		this.title = title;
 	}
-	public ChestDisplay(int ySize, Icon[] icons) {
+	public ChestDisplay(int ySize, ArrayList<Icon> icons) {
 		this(ySize, icons, "Display");
 	}
 	public ChestDisplay(int ySize) {

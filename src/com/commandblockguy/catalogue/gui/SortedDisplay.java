@@ -31,12 +31,12 @@ public class SortedDisplay extends ChestDisplay {
 		backIcon = new BackIcon(8, this);
 		downIcon = new DownIcon(53, this);
 		
-		icons = new Icon[3];
-		icons[0] = upIcon;
+		icons = new ArrayList<Icon>();
+		icons.add(upIcon);
 		//icons[1] = sortIcon;
 		//icons[2] = filterIcon;
-		icons[1] = backIcon;
-		icons[2] = downIcon;
+		icons.add(backIcon);
+		icons.add(downIcon);
 	}
 	public int getScroll() {
 		return scroll;
@@ -47,7 +47,7 @@ public class SortedDisplay extends ChestDisplay {
 	public ArrayList<ShopIcon> getIcons() {
 		return sortedIcons;
 	}
-	public void addIcon(Icon icon) {
+	public void addIcon(ShopIcon icon) {
 		int slot = 0;
 		if (!sortedIcons.isEmpty()) {
 			slot = sortedIcons.get(sortedIcons.size() - 1).itemSlot() + 1;
@@ -55,11 +55,11 @@ public class SortedDisplay extends ChestDisplay {
 				slot++;
 		}
 		icon.setSlot(slot);
-		sortedIcons.add((ShopIcon) icon);
+		sortedIcons.add(icon);
 	}
 	public void addIcons(ArrayList<ShopIcon> icons) {
 		if (icons != null) {
-			for(Icon i : icons) {
+			for(ShopIcon i : icons) {
 				this.addIcon(i);
 			}
 		}
@@ -67,13 +67,15 @@ public class SortedDisplay extends ChestDisplay {
 	@Override
 	public void create() {
 		inv = Bukkit.createInventory(null, 9 * ySize, title);
+		for (ShopIcon i : sortedIcons) {
+			if (9 * scroll <= i.itemSlot()) {
+				i.setSlot(i.itemSlot() - (9 * scroll));
+				i.setPlayer(player);
+				icons.add(i);
+			}
+		}
 		for (Icon i : icons) {
 			inv.setItem(i.itemSlot(), i.getItem());
-		}
-		for (Icon i : sortedIcons) {
-			if (9 * scroll <= i.itemSlot()) {
-				inv.setItem(i.itemSlot() - (9 * scroll), i.getItem());
-			}
 		}
 
 		Catalogue.getPlugin().getServer().getPluginManager().registerEvents(listener, Catalogue.getPlugin());
