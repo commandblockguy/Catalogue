@@ -1,11 +1,14 @@
 name: Catalogue
 main: com.commandblockguy.catalogue.Catalogue
 version: 1.0
-database: true
+database: false
 commands:
   catalogue:
-    description: Your description
-    usage: /catalogue (item)
+    description: View the catalogue of shops that buy and sell a certain item
+    usage: /catalogue [item] [filter (type) (value) [operator]] [sort (type) [des]]
+  registershop:
+    description: Register a shop that was created before the Catalogue plugin was added to the server by looking at it or specifying coordinates
+    usage: /registershop [x y z]
 permissions:
   catalogue.*:
     description: Gives access to all catalogue commands

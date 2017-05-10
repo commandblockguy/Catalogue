@@ -7,6 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
+import com.commandblockguy.catalogue.Catalogue;
+
 public class Icon{
 	public Icon() {
 		
@@ -75,6 +77,6 @@ public class Icon{
 		return (slotNumber - slotX(slotNumber)) / 9;
 	}
 	public void clickAction() {
-		System.out.println("Error: Icon with no run action was clicked!");
+		System.out.println(Catalogue.getPlugin().localization.getString("icon.error.invalidclickaction"));
 	}
 }

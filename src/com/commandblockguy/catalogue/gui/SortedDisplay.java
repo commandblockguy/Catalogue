@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import com.commandblockguy.catalogue.Catalogue;
 import com.commandblockguy.catalogue.gui.icons.BackIcon;
 import com.commandblockguy.catalogue.gui.icons.DownIcon;
+import com.commandblockguy.catalogue.gui.icons.HelpIcon;
 import com.commandblockguy.catalogue.gui.icons.ShopIcon;
 import com.commandblockguy.catalogue.gui.icons.UpIcon;
 
@@ -14,13 +15,14 @@ import com.commandblockguy.catalogue.gui.icons.UpIcon;
 public class SortedDisplay extends ChestDisplay {
 	
 	private BackIcon backIcon;
+	private HelpIcon helpIcon;
 	private UpIcon upIcon;
 	private DownIcon downIcon;
 	private int scroll = 0;
 	private ArrayList<ShopIcon> sortedIcons = new ArrayList<ShopIcon>();
 	
 	public SortedDisplay(int scroll, String windowTitle) {
-		super(6, null, "Sorted Display");
+		super(6, null, Catalogue.getPlugin().localization.getString("commands.catalogue.windowtitle"));
 		listener = this;
 		this.scroll = scroll;
 		this.title = windowTitle;
@@ -29,12 +31,14 @@ public class SortedDisplay extends ChestDisplay {
 		//sortIcon = new SortIcon(17);
 		//filterIcon = new FilterIcon(26);
 		backIcon = new BackIcon(8, this);
+		helpIcon = new HelpIcon(26, this);
 		downIcon = new DownIcon(53, this);
 		
 		icons = new ArrayList<Icon>();
 		icons.add(upIcon);
 		//icons[1] = sortIcon;
 		//icons[2] = filterIcon;
+		icons.add(helpIcon);
 		icons.add(backIcon);
 		icons.add(downIcon);
 	}

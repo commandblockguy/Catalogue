@@ -1,6 +1,7 @@
 package com.commandblockguy.catalogue;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -107,7 +108,7 @@ public class Shop {
 		return townName;
 	}
 	
-	public void register() {
+	public boolean register() {
 		String[] args = {
 					String.valueOf(pos.getBlockX()),
 					String.valueOf(pos.getBlockY()),
@@ -128,7 +129,9 @@ public class Shop {
             pstmt.executeUpdate();
             } catch (SQLException e) {
             	e.printStackTrace();
+            	return false;
             }
+		return false;
 	}
 	public void unregister() {
 		String[] args = {
@@ -146,5 +149,26 @@ public class Shop {
             } catch (SQLException e) {
             	e.printStackTrace();
             }
+	}
+	public boolean isRegistered() {
+		String[] args = {
+				String.valueOf(pos.getBlockX()),
+				String.valueOf(pos.getBlockY()),
+				String.valueOf(pos.getBlockZ())
+			};
+	String query = "SELECT * FROM shops WHERE PosX=? AND (PosY=? AND PosZ=?)";
+    try {
+        PreparedStatement pstmt = Catalogue.connection.prepareStatement(query);
+        for(int argument = 1; argument <= args.length; argument++) {
+        	pstmt.setString(argument, args[argument - 1]);
+        }
+        ResultSet results = pstmt.executeQuery();
+        if (results.next()) {
+        	return true;
+        }
+    } catch (SQLException e) {
+        	e.printStackTrace();
+    }
+    return false;
 	}
 }

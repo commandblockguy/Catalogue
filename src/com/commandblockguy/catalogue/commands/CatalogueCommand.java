@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.commandblockguy.catalogue.Catalogue;
 import com.commandblockguy.catalogue.gui.SortedDisplay;
 import com.commandblockguy.catalogue.gui.comparators.AmountComparator;
 import com.commandblockguy.catalogue.gui.comparators.BuyPriceComparator;
@@ -35,7 +36,7 @@ public class CatalogueCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            String title = "Catalogue";
+            String title = Catalogue.getPlugin().localization.getString("commands.catalogue.windowtitle");
             //check if the player has the permissions to run the command
             if (player.hasPermission("catalogue.gui")) {
             	//in case multiple filters are applied, a arraylist is used
@@ -51,8 +52,9 @@ public class CatalogueCommand implements CommandExecutor {
         			filters.add(new NoFilter());
         		} else if(args.length == 1) {
         			//run with one arg, the name of an item
-        			title += ": " + args[0]; //set the window title
-        			filters.add(new ItemFilter(args[0], FilterOperator.EQUALS));
+        			String itemName = args[0].replace("_", " ");
+        			title += ": " + itemName; //set the window title
+        			filters.add(new ItemFilter(itemName, FilterOperator.EQUALS));
         		} else {
         			//run with an item name plus filters and sorters
         			title += ": " + args[0];
@@ -115,7 +117,6 @@ public class CatalogueCommand implements CommandExecutor {
         					FilterOperator operator = null;
         					if(args.length < i + 2) {
         						//filters need at least a type and a value
-        						sender.sendMessage("Use \"filter (type) (value) [operator]\"");
         						return false;
         					}
         					try {

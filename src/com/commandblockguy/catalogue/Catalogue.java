@@ -1,15 +1,19 @@
 package com.commandblockguy.catalogue;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.commandblockguy.catalogue.commands.CatalogueCommand;
+import com.commandblockguy.catalogue.commands.RegisterShopCommand;
 import com.commandblockguy.catalogue.listeners.ShopCreated;
 import com.commandblockguy.catalogue.listeners.ShopDestroyed;
 import com.commandblockguy.catalogue.listeners.Transaction;
@@ -27,7 +31,8 @@ public class Catalogue extends JavaPlugin {
     	plugin = this;
     }
     
-    public FileConfiguration config = this.getConfig();    
+    public FileConfiguration config = this.getConfig();
+    public FileConfiguration localization;
     public static Connection connection;
     
     @Override
@@ -38,6 +43,7 @@ public class Catalogue extends JavaPlugin {
     	url = config.getString("SQL_URL");
     	database = config.getString("SQL_database");
     	this.getCommand("catalogue").setExecutor(new CatalogueCommand());
+    	this.getCommand("registershop").setExecutor(new RegisterShopCommand());
     	this.registerEvent(new ShopCreated());
     	this.registerEvent(new ShopDestroyed());
     	this.registerEvent(new Transaction());
@@ -78,7 +84,27 @@ public class Catalogue extends JavaPlugin {
     }
     
     private void createConfig() {
+    	File localizationFile = new File(getDataFolder(), "local.yml");
+    	localization = YamlConfiguration.loadConfiguration(localizationFile);
+    	localization.addDefault("commands.register.error.generic", "Error occured! Where did I/you go wrong???");
+    	localization.addDefault("commands.register.error.nonplayer", "Please specify coords while running command from console");
+    	localization.addDefault("commands.register.error.invalid", "Target block at (coords) is not a valid shop!");
+    	localization.addDefault("commands.register.error.registered", "Target block at (coords) is already registered!");
+    	localization.addDefault("commands.register.success", "Shop at (coords) was successfully registered!");
+    	localization.addDefault("commands.register.error.nonsign", "Target block at (coords) is not a sign!");
+    	localization.addDefault("icon.error.invalidclickaction", "Error: Icon with no run action was clicked!");
+    	localization.addDefault("help.desusage", "Use \"des\" after a sort to invert the sort order");
+    	localization.addDefault("help.underscores", "Use \"_\" instead of spaces in item names");
+    	localization.addDefault("commands.catalogue.windowtitle", "Catalogue");
+    	localization.options().copyDefaults(true);
+    	try {
+			localization.save(localizationFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
 		config.addDefault("registerExistingShopsOnTransaction", true);
+		config.addDefault("registerShopTargetDistance", 32);
 		config.addDefault("SQL_username", "minecraft");
 		config.addDefault("SQL_password", "minecraft");
 		config.addDefault("SQL_URL", "jdbc:mysql://localhost:3306/");
