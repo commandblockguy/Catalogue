@@ -95,6 +95,7 @@ public class Catalogue extends JavaPlugin {
     	localization.addDefault("icon.error.invalidclickaction", "Error: Icon with no run action was clicked!");
     	localization.addDefault("help.desusage", "Use \"des\" after a sort to invert the sort order");
     	localization.addDefault("help.underscores", "Use \"_\" instead of spaces in item names");
+    	localization.addDefault("help.compasses", "If you click a shop, compasses in your inventory will point towards it");
     	localization.addDefault("commands.catalogue.windowtitle", "Catalogue");
     	localization.options().copyDefaults(true);
     	try {
