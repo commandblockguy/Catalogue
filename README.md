@@ -3,7 +3,7 @@ A catalogue plugin for https://www.spigotmc.org/resources/chestshop-for-iconomy-
 
 Currently in development - view details here: https://www.cemetech.net/forum/viewtopic.php?p=258413#258413
 
-Not currently intended for actual use as it requires a MySQL server to use
+Requires a MySQL server to use
 
 To use:
 Create a sign shop, or make a transaction with an existing one.
