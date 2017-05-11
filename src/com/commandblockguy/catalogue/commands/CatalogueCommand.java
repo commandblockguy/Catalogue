@@ -1,6 +1,7 @@
 package com.commandblockguy.catalogue.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -41,26 +42,32 @@ public class CatalogueCommand implements CommandExecutor {
             if (player.hasPermission("catalogue.gui")) {
             	//in case multiple filters are applied, a arraylist is used
         		ArrayList<Filter> filters = new ArrayList<Filter>();
+        		ArrayList<Filter> additiveFilters = new ArrayList<Filter>();
         		Comparator<ShopIcon> sorter = null;
         		//sort order will be inverted if des or descending is added
         		boolean descending = false;
         		if(args.length == 0) {
         			//run with no args, showing all shops
-        			filters.add(new NoFilter());
-        		} else if(args[0].equals("browse")) {
+        			additiveFilters.add(new NoFilter());
+        		} else if(args[0].equals("browse") && args.length == 1) {
         			//run wit browse arg, show all shops
         			filters.add(new NoFilter());
         		} else if(args.length == 1) {
         			//run with one arg, the name of an item
         			String itemName = args[0].replace("_", " ");
         			title += ": " + itemName; //set the window title
-        			filters.add(new ItemFilter(itemName, FilterOperator.EQUALS));
+        			String[] ignore = {"browse", "search", "filter", "afilter", "sort"};
+        			if(!(Arrays.asList(ignore).contains(args[0])))
+        				additiveFilters.add(new ItemFilter(itemName, FilterOperator.EQUALS));
         		} else {
         			//run with an item name plus filters and sorters
-        			title += ": " + args[0];
-        			filters.add(new ItemFilter(args[0], FilterOperator.EQUALS));
+        			String itemName = args[0].replace("_", " ");
+        			title += ": " + itemName; //set the window title
+        			String[] ignore = {"browse", "search", "filter", "afilter", "sort"};
+        			if(!(Arrays.asList(ignore).contains(args[0])))
+        				additiveFilters.add(new ItemFilter(itemName, FilterOperator.EQUALS));
         			//look at each argument after the item name
-        			for(int i = 1; i < args.length; i++) {
+        			for(int i = 0; i < args.length; i++) {
         				
         				if(args[i].equals("sort") && sorter == null) {
         					if(args.length < i + 2)
@@ -112,9 +119,13 @@ public class CatalogueCommand implements CommandExecutor {
         					}
         				}
         				
-        				else if(args[i].equals("filter")) {
+        				else if(args[i].equals("filter") || args[i].equals("afilter")) {
         					//if operator is null, a default is assigned
         					FilterOperator operator = null;
+        					boolean additive = false;
+        					if(additiveFilters.size() == 0 || args[i].equals("afilter")) {
+        						additive = true;
+        					}
         					if(args.length < i + 2) {
         						//filters need at least a type and a value
         						return false;
@@ -162,34 +173,40 @@ public class CatalogueCommand implements CommandExecutor {
         					} catch(ArrayIndexOutOfBoundsException exception) {
         						//we can ignore this, it means that the operator was omitted
         					}
+        					Filter toAdd = new NoFilter();
         					switch(args[i + 1].toLowerCase()) {
         					//cases for each type of filter
         					case "amount":
         						//default operator
         						if(operator == null) operator = FilterOperator.GREATER_THAN_EQUAL_TO;
-        						filters.add(new AmountFilter(Double.parseDouble(args[i + 2]), operator));
+        						toAdd = new AmountFilter(Double.parseDouble(args[i + 2]), operator);
         						break;
         					case "buyprice":
         					case "buy":
         					case "price":
         						if(operator == null) operator = FilterOperator.LESS_THAN_EQUAL_TO;
-        						filters.add(new BuyPriceFilter(Double.parseDouble(args[i + 2]), operator));
+        						toAdd = new BuyPriceFilter(Double.parseDouble(args[i + 2]), operator);
         						break;
         					case "sellprice":
         					case "sell":
         					case "value":
         						if(operator == null) operator = FilterOperator.LESS_THAN_EQUAL_TO;
-        						filters.add(new SellPriceFilter(Double.parseDouble(args[i + 2]), operator));
+        						toAdd = new SellPriceFilter(Double.parseDouble(args[i + 2]), operator);
         						break;
         					case "player":
         						if(operator == null) operator = FilterOperator.EQUALS;
-        						filters.add(new PlayerFilter(args[i + 2], operator));
+        						toAdd = new PlayerFilter(args[i + 2], operator);
         						break;
         					case "town":
         						if(operator == null) operator = FilterOperator.EQUALS;
-        						filters.add(new TownFilter(args[i + 2], operator));
+        						toAdd = new TownFilter(args[i + 2], operator);
         					default:
         						break;
+        					}
+        					if(additive) {
+        						additiveFilters.add(toAdd);
+        					} else {
+        						filters.add(toAdd);
         					}
         				}
         			}
@@ -197,12 +214,11 @@ public class CatalogueCommand implements CommandExecutor {
         		
             	SortedDisplay display = new SortedDisplay(0, title); //create the display with no scroll
             	ArrayList<ShopIcon> icons = new ArrayList<ShopIcon>(); //arraylist of icons to be filtered
+            	for(Filter filter : additiveFilters) {
+            		icons.addAll(filter.getOutput(player.getWorld()));
+            	}
             	for(Filter filter : filters) {
-            		if(icons.size() == 0) { // first filter adds all its icons to the list
-            			icons.addAll(filter.getOutput(player.getWorld()));
-            		} else {
-            			filter.filter(icons, player.getWorld());
-            		}
+            		filter.filter(icons, player.getWorld());
             	}
             	
             	if(sorter == null)

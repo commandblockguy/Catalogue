@@ -54,7 +54,10 @@ public abstract class Filter {
 	        	Shop shop = new Shop(item, amount, buyPrice, sellPrice, pos, player);
 	        	ShopIcon icon = new ShopIcon(shop);
 	        	icon.setAmount(amount);
-	        	icon.addLore("Player: " + Bukkit.getOfflinePlayer(player).getName());
+	        	String playerName = Bukkit.getOfflinePlayer(player).getName();
+	        	if(playerName == null)
+	        		playerName = "Server";
+	        	icon.addLore("Player: " + playerName);
 	        	if(buyPrice > 0) {
 	        		icon.addLore("Buy Price: " + buyPrice);
 	        		if(amount != 1)

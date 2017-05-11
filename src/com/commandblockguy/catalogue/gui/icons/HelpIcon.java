@@ -30,6 +30,7 @@ public class HelpIcon extends Icon {
 		player.sendMessage(Catalogue.getPlugin().getCommand("catalogue").getUsage());
 		player.sendMessage(Catalogue.getPlugin().localization.getString("help.underscores"));
 		player.sendMessage(Catalogue.getPlugin().localization.getString("help.compasses"));
+		player.sendMessage(Catalogue.getPlugin().localization.getString("help.afilter"));
 		player.sendMessage("Filter Types: Amount, Buy Price, Item, Player, Sell Price, Town");
 		player.sendMessage("Sort Types: Amount, Buy Price, Item Name, Per Item Buy Price, Per Item Sell Price, Sell Price, Town Name");
 		player.sendMessage(Catalogue.getPlugin().localization.getString("help.desusage"));
