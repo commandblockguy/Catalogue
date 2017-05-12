@@ -220,11 +220,9 @@ public class CatalogueCommand implements CommandExecutor {
             		filters.remove(0);
             	}
             	for(Filter filter : additiveFilters) {
-            		sender.sendMessage("Additive Filter " + filter.getValue());
             		icons.addAll(filter.getOutput(player.getWorld()));
             	}
             	for(Filter filter : filters) {
-            		sender.sendMessage("Subractive Filter " + filter.getValue());
             		filter.filter(icons, player.getWorld());
             	}
             	
