@@ -99,12 +99,12 @@ public abstract class Filter {
 			switch (operatorString) {
 			default:
 			case "=":
-				if (!shopValue.equals(this.filterValue)) {
+				if (!shopValue.equalsIgnoreCase(this.filterValue)) {
 					toRemove.add(icon);
 				}
 				break;
 			case "<>":
-				if (shopValue.equals(this.filterValue))
+				if (shopValue.equalsIgnoreCase(this.filterValue))
 					toRemove.add(icon);
 				break;
 			case "<":

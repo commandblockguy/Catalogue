@@ -65,7 +65,7 @@ public class CatalogueCommand implements CommandExecutor {
         			title += ": " + itemName; //set the window title
         			String[] ignore = {"browse", "search", "filter", "afilter", "sort"};
         			if(!(Arrays.asList(ignore).contains(args[0])))
-        				additiveFilters.add(new ItemFilter(itemName, FilterOperator.EQUALS));
+        				filters.add(new ItemFilter(itemName, FilterOperator.EQUALS));
         			//look at each argument after the item name
         			for(int i = 0; i < args.length; i++) {
         				
@@ -123,7 +123,7 @@ public class CatalogueCommand implements CommandExecutor {
         					//if operator is null, a default is assigned
         					FilterOperator operator = null;
         					boolean additive = false;
-        					if(additiveFilters.size() == 0 || args[i].equals("afilter")) {
+        					if(args[i].equals("afilter")) {
         						additive = true;
         					}
         					if(args.length < i + 2) {
@@ -214,10 +214,17 @@ public class CatalogueCommand implements CommandExecutor {
         		
             	SortedDisplay display = new SortedDisplay(0, title); //create the display with no scroll
             	ArrayList<ShopIcon> icons = new ArrayList<ShopIcon>(); //arraylist of icons to be filtered
+            	if(additiveFilters.size() == 0 && filters.size() > 0) {
+            		sender.sendMessage("Condition Met!");
+            		additiveFilters.add(filters.get(0));
+            		filters.remove(0);
+            	}
             	for(Filter filter : additiveFilters) {
+            		sender.sendMessage("Additive Filter " + filter.getValue());
             		icons.addAll(filter.getOutput(player.getWorld()));
             	}
             	for(Filter filter : filters) {
+            		sender.sendMessage("Subractive Filter " + filter.getValue());
             		filter.filter(icons, player.getWorld());
             	}
             	

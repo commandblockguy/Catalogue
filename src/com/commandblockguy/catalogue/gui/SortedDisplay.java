@@ -59,7 +59,8 @@ public class SortedDisplay extends ChestDisplay {
 				slot++;
 		}
 		icon.setSlot(slot);
-		sortedIcons.add(icon);
+		if(!sortedIcons.contains(icon))
+			sortedIcons.add(icon);
 	}
 	public void addIcons(ArrayList<ShopIcon> icons) {
 		if (icons != null) {
@@ -75,7 +76,8 @@ public class SortedDisplay extends ChestDisplay {
 			if (9 * scroll <= i.itemSlot()) {
 				i.setSlot(i.itemSlot() - (9 * scroll));
 				i.setPlayer(player);
-				icons.add(i);
+				if(i.itemSlot() < 54)
+					icons.add(i);
 			}
 		}
 		for (Icon i : icons) {
