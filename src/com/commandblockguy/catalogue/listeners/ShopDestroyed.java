@@ -23,6 +23,7 @@ public class ShopDestroyed  implements Listener {
 				};
 		String query = "DELETE FROM shops WHERE PosX=? AND (PosY=? AND PosZ=?)";
         try {
+        	Catalogue.connect();
             PreparedStatement pstmt = Catalogue.connection.prepareStatement(query);
             for(int argument = 1; argument <= args.length; argument++) {
             	pstmt.setString(argument, args[argument - 1]);

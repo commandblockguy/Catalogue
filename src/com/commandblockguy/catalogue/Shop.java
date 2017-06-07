@@ -122,6 +122,7 @@ public class Shop {
 				};
 		String query = "INSERT INTO shops (PosX, PosY, PosZ, BuyPrice, SellPrice, Itemtype, Amount, PlayerName, TownName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
+        	Catalogue.connect();
             PreparedStatement pstmt = Catalogue.connection.prepareStatement(query);
             for(int argument = 1; argument <= args.length; argument++) {
             	pstmt.setString(argument, args[argument - 1]);
@@ -141,6 +142,7 @@ public class Shop {
 				};
 		String query = "DELETE FROM shops WHERE PosX=? AND (PosY=? AND PosZ=?)";
         try {
+        	Catalogue.connect();
             PreparedStatement pstmt = Catalogue.connection.prepareStatement(query);
             for(int argument = 1; argument <= args.length; argument++) {
             	pstmt.setString(argument, args[argument - 1]);

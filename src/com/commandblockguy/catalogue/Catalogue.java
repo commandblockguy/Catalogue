@@ -21,17 +21,17 @@ import com.commandblockguy.catalogue.listeners.Transaction;
 
 public class Catalogue extends JavaPlugin {
 	private static Catalogue plugin;
-    private String username; 
-    private String password; 
-    private String url;
-    private String database;
+    private static String username; 
+    private static String password; 
+    private static String url;
+    private static String database;
    
 
     public Catalogue() {
     	plugin = this;
     }
     
-    public FileConfiguration config = this.getConfig();
+    public FileConfiguration config;
     public FileConfiguration localization;
     public static Connection connection;
     
@@ -59,7 +59,17 @@ public class Catalogue extends JavaPlugin {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        String createTable = "CREATE TABLE IF NOT EXISTS shops(ID integer NOT NULL AUTO_INCREMENT, PosX integer, PosY integer, PosZ integer, BuyPrice decimal(12,2), SellPrice decimal(12,2), ItemType varchar(32), Amount integer, PlayerName varchar(36), TownName varchar(32) DEFAULT 'None', TimeStamp timestamp DEFAULT NOW(), PRIMARY KEY (ID));";
+        String createTable = "CREATE TABLE IF NOT EXISTS "
+        		+ "shops(ID integer NOT NULL AUTO_INCREMENT, "
+        			+ "PosX integer, PosY integer, PosZ integer, "
+        			+ "BuyPrice decimal(12,2), "
+        			+ "SellPrice decimal(12,2), "
+        			+ "ItemType varchar(32), "
+        			+ "Amount integer, "
+        			+ "PlayerName varchar(36), "
+        			+ "TownName varchar(32) DEFAULT 'None', "
+        			+ "TimeStamp timestamp DEFAULT NOW(), "
+        			+ "PRIMARY KEY (ID));";
         try {
             PreparedStatement table = connection.prepareStatement(createTable);
             table.executeUpdate();
@@ -70,14 +80,13 @@ public class Catalogue extends JavaPlugin {
 	@Override
     public void onDisable() {
         try {
-                if(connection!=null && !connection.isClosed()){
-                        connection.close();
-                }
-        }catch(Exception e){
-                        e.printStackTrace();
-                }
-
+        	if(connection != null && !connection.isClosed()) {
+        		connection.close();
+        	}
+        } catch (Exception e) {
+        	e.printStackTrace();
         }
+    }
     
     public static Catalogue getPlugin() {
     	return plugin;
@@ -106,6 +115,7 @@ public class Catalogue extends JavaPlugin {
 			e.printStackTrace();
 		}
     	
+    	config = this.getConfig();
 		config.addDefault("registerExistingShopsOnTransaction", true);
 		config.addDefault("registerShopTargetDistance", 32);
 		config.addDefault("SQL_username", "minecraft");
@@ -120,4 +130,44 @@ public class Catalogue extends JavaPlugin {
     public void registerEvent(Listener listener) {
         this.getServer().getPluginManager().registerEvents(listener, this);
      }
+    
+    public static void connect() {
+    	boolean disconnected;
+		try {
+			disconnected = connection == null || connection.isClosed();
+		} catch (SQLException e) {
+			disconnected = true;
+		}
+    	if(disconnected) {
+    		try { 
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                System.err.println("jdbc driver unavailable!");
+                return;
+            }
+            try {
+                connection = DriverManager.getConnection(url + database, username, password);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            String createTable = "CREATE TABLE IF NOT EXISTS "
+            		+ "shops(ID integer NOT NULL AUTO_INCREMENT, "
+            			+ "PosX integer, PosY integer, PosZ integer, "
+            			+ "BuyPrice decimal(12,2), "
+            			+ "SellPrice decimal(12,2), "
+            			+ "ItemType varchar(32), "
+            			+ "Amount integer, "
+            			+ "PlayerName varchar(36), "
+            			+ "TownName varchar(32) DEFAULT 'None', "
+            			+ "TimeStamp timestamp DEFAULT NOW(), "
+            			+ "PRIMARY KEY (ID));";
+            try {
+                PreparedStatement table = connection.prepareStatement(createTable);
+                table.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+    	}
+    }
 }

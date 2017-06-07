@@ -38,6 +38,7 @@ public abstract class Filter {
 		String query = "SELECT * FROM shops WHERE " + column + operatorValue(operator) + "?";
 		ArrayList<ShopIcon> output = new ArrayList<ShopIcon>();
 	    try {
+	    	Catalogue.connect();
 	        PreparedStatement pstmt = c.prepareStatement(query);
 	        pstmt.setString(1, filterValue);
 	        ResultSet results = pstmt.executeQuery();
