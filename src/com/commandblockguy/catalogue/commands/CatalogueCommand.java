@@ -58,14 +58,14 @@ public class CatalogueCommand implements CommandExecutor {
         			title += ": " + itemName; //set the window title
         			String[] ignore = {"browse", "search", "filter", "afilter", "sort"};
         			if(!(Arrays.asList(ignore).contains(args[0])))
-        				additiveFilters.add(new ItemFilter(itemName, FilterOperator.EQUALS));
+        				additiveFilters.add(new ItemFilter(itemName, FilterOperator.CONTAINS));
         		} else {
         			//run with an item name plus filters and sorters
         			String itemName = args[0].replace("_", " ");
         			title += ": " + itemName; //set the window title
         			String[] ignore = {"browse", "search", "filter", "afilter", "sort"};
         			if(!(Arrays.asList(ignore).contains(args[0])))
-        				filters.add(new ItemFilter(itemName, FilterOperator.EQUALS));
+        				filters.add(new ItemFilter(itemName, FilterOperator.CONTAINS));
         			//look at each argument after the item name
         			for(int i = 0; i < args.length; i++) {
         				
@@ -215,7 +215,6 @@ public class CatalogueCommand implements CommandExecutor {
             	SortedDisplay display = new SortedDisplay(0, title); //create the display with no scroll
             	ArrayList<ShopIcon> icons = new ArrayList<ShopIcon>(); //arraylist of icons to be filtered
             	if(additiveFilters.size() == 0 && filters.size() > 0) {
-            		sender.sendMessage("Condition Met!");
             		additiveFilters.add(filters.get(0));
             		filters.remove(0);
             	}

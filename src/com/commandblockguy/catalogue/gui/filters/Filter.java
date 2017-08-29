@@ -36,6 +36,10 @@ public abstract class Filter {
 	public ArrayList<ShopIcon> getOutput(World world) {
 		//Filters from ALL shops
 		String query = "SELECT * FROM shops WHERE " + column + operatorValue(operator) + "?";
+		if(operator == FilterOperator.CONTAINS) {
+			query = "SELECT * FROM shops WHERE " + column + " LIKE ?";
+			filterValue = "%" + filterValue + "%";
+		}
 		ArrayList<ShopIcon> output = new ArrayList<ShopIcon>();
 	    try {
 	    	Catalogue.connect();
@@ -124,6 +128,11 @@ public abstract class Filter {
 				if (!(Double.parseDouble(shopValue) >= Double.parseDouble(this.filterValue)))
 					toRemove.add(icon);
 				break;
+			case "contains":
+				if (!shopValue.contains(this.filterValue)) {
+					toRemove.add(icon);
+				}
+				break;
 			case "none":
 				break;
 			}
@@ -152,6 +161,9 @@ public abstract class Filter {
 			break;
 		case GREATER_THAN_EQUAL_TO:
 			value = ">=";
+			break;
+		case CONTAINS:
+			value = "contains";
 			break;
 		}
 		return value;
